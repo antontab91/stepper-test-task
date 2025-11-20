@@ -6,7 +6,6 @@ const STEP_ID = {
     SCREENING_CALL: 'screeningCall',
     TECH_INTERVIEW: 'techInterview',
     BAR_RAISER: 'barRaiser',
-
     POSITION_CLOSED: 'positionClosed',
     REJECT: 'silentReject',
     OFFER: 'endOffer',
@@ -14,8 +13,6 @@ const STEP_ID = {
 
 const STEP_TYPE = {
     BRANCH: 'branch',
-    STORY: 'story',
-    BACK: 'back',
     RANDOM: 'random',
     END: 'end',
 } as const;
@@ -41,24 +38,24 @@ interface Step {
 export const STEPS: Step[] = [
     {
         id: STEP_ID.POSITION_CLOSED,
+        type: STEP_TYPE.BRANCH,
         title: 'Вакансію закрили',
         text: 'Позиція закрита',
-        type: STEP_TYPE.END,
     },
 
     {
         id: STEP_ID.REJECT,
-        title: 'Кінець',
-        text: 'Шукаю далі',
-        type: STEP_TYPE.END,
-        links: [{ to: STEP_ID.START }],
+        title: 'Відмова після технічної',
+        text: 'Ми обрали іншого кандидата',
+        type: STEP_TYPE.BRANCH,
+        links: [{ label: 'Буду шукати далі', to: STEP_ID.START }],
     },
 
     {
         id: STEP_ID.OFFER,
+        type: STEP_TYPE.END,
         title: 'Оффер',
         text: 'Запросили',
-        type: STEP_TYPE.END,
     },
     {
         id: STEP_ID.START,
@@ -74,7 +71,7 @@ export const STEPS: Step[] = [
 
     {
         id: STEP_ID.PREPARED,
-        type: STEP_TYPE.STORY,
+        type: STEP_TYPE.BRANCH,
         title: 'Підготовка',
         text: 'Вивчаю вимоги,готуюсь, оновлюю CV ',
         links: [
@@ -97,7 +94,7 @@ export const STEPS: Step[] = [
 
     {
         id: STEP_ID.SCREENING_INVITE,
-        type: STEP_TYPE.STORY,
+        type: STEP_TYPE.BRANCH,
         title: 'Запрошення на скринінг',
         text: 'Рекрутер написав, що моє СВ сподобалось, пропонує пропонує познайомитись',
         links: [
@@ -127,17 +124,9 @@ export const STEPS: Step[] = [
         text: 'JS, TS, React, і тд по вимогам',
         links: [
             { label: 'Вирішив задачі', to: STEP_ID.BAR_RAISER },
-
             { label: 'Не впорався із задачами', to: STEP_ID.REJECT },
+            { label: 'Попити чайку', to: STEP_ID.REJECT },
         ],
-    },
-
-    {
-        id: STEP_ID.REJECT,
-        title: 'Відмова після технічної',
-        text: 'Ми обрали іншого кандидата',
-        type: STEP_TYPE.BACK,
-        links: [{ label: 'Буду шукати далі', to: STEP_ID.START }],
     },
 
     {
