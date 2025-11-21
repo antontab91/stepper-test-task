@@ -1,0 +1,103 @@
+[
+    {
+        "id": "positionClosed",
+        "type": "branch",
+        "title": "Вакансію закрили",
+        "text": "Позиція закрита",
+        "links": [{ "label": "Буду шукати далі", "to": "start" }]
+    },
+    {
+        "id": "reject",
+        "type": "branch",
+        "title": "Відмова",
+        "text": "Обрали іншого кандидата",
+        "links": [{ "label": "Буду шукати далі", "to": "start" }]
+    },
+    {
+        "id": "endOffer",
+        "type": "end",
+        "title": "Оффер",
+        "text": "Запросили",
+        "links": []
+    },
+
+    {
+        "id": "start",
+        "type": "branch",
+        "title": "Нова вакансія",
+        "text": "Знайшов цікаву вакансію.",
+        "links": [
+            { "label": "Відгукнутися", "to": "sentCv" },
+            { "label": "Підготовка", "to": "prepared" },
+            { "label": "Попити чайку", "to": "reject" }
+        ]
+    },
+
+    {
+        "id": "prepared",
+        "type": "branch",
+        "title": "Підготовка",
+        "text": "Вивчаю вимоги, готуюсь, оновлюю CV",
+        "links": [
+            { "label": "Відгукнутися", "to": "sentCv" },
+            { "label": "Попити чайку", "to": "reject" }
+        ]
+    },
+
+    {
+        "id": "sentCv",
+        "type": "random",
+        "title": "Відправив CV",
+        "text": "Відправив CV. Перевіряю email, LinkedIn, Telegram.",
+        "links": [
+            { "label": "Запрошення на скринінг", "to": "screeningInvite" },
+            { "label": "Вакансію закрили", "to": "positionClosed" },
+            { "label": "Довго чекав, не відповіли", "to": "reject" }
+        ]
+    },
+
+    {
+        "id": "screeningInvite",
+        "type": "branch",
+        "title": "Запрошення на скринінг",
+        "text": "Рекрутер написав, що СV сподобалось",
+        "links": [
+            { "label": "Скринінг з ейчаром", "to": "screeningCall" },
+            { "label": "Попити чайку", "to": "reject" }
+        ]
+    },
+
+    {
+        "id": "screeningCall",
+        "type": "branch",
+        "title": "Скринінг з ейчаром",
+        "text": "Обговорюємо досвід, стек, зарплату",
+        "links": [
+            { "label": "Все супер, рухаюсь далі", "to": "techInterview" },
+            { "label": "Не метч, щось не підійшло", "to": "reject" }
+        ]
+    },
+
+    {
+        "id": "techInterview",
+        "type": "branch",
+        "title": "Технічна співбесіда",
+        "text": "JS, TS, React, інше по вимогам",
+        "links": [
+            { "label": "Вирішив задачі", "to": "barRaiser" },
+            { "label": "Не впорався із задачами", "to": "reject" },
+            { "label": "Попити чайку", "to": "reject" }
+        ]
+    },
+
+    {
+        "id": "barRaiser",
+        "type": "branch",
+        "title": "Баррейзінг",
+        "text": "Говорю з техлідом",
+        "links": [
+            { "label": "Сильні відповіді", "to": "endOffer" },
+            { "label": "Вибрали іншого кандидата", "to": "reject" }
+        ]
+    }
+]
