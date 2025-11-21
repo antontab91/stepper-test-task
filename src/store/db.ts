@@ -9,12 +9,12 @@ const DB_NAME = 'stepper-db';
 const STORE_STEPS = 'steps';
 const STORE_STATE = 'state';
 
-export const openDB = (): Promise<IDBDatabase> =>
+const openDB = (): Promise<IDBDatabase> =>
     new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, 1);
+        const request = indexedDB.open(DB_NAME, 1);
 
-        req.onupgradeneeded = () => {
-            const db = req.result;
+        request.onupgradeneeded = () => {
+            const db = request.result;
 
             if (!db.objectStoreNames.contains(STORE_STEPS)) {
                 db.createObjectStore(STORE_STEPS, { keyPath: 'id' });
@@ -24,21 +24,21 @@ export const openDB = (): Promise<IDBDatabase> =>
             }
         };
 
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
     });
 
 export const loadSteps = async (): Promise<Step[]> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_STEPS, 'readonly');
-        const store = tx.objectStore(STORE_STEPS);
+        const transaction = db.transaction(STORE_STEPS, 'readonly');
+        const store = transaction.objectStore(STORE_STEPS);
 
-        const req = store.getAll();
+        const request = store.getAll();
 
-        req.onsuccess = () => resolve(req.result ?? []);
-        req.onerror = () => reject(req.error);
+        request.onsuccess = () => resolve(request.result ?? []);
+        request.onerror = () => reject(request.error);
     });
 };
 
@@ -46,13 +46,13 @@ export const saveSteps = async (steps: Step[]): Promise<void> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_STEPS, 'readwrite');
-        const store = tx.objectStore(STORE_STEPS);
+        const transaction = db.transaction(STORE_STEPS, 'readwrite');
+        const store = transaction.objectStore(STORE_STEPS);
 
         steps.forEach((step) => store.put(step));
 
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
     });
 };
 
@@ -60,13 +60,13 @@ export const loadState = async (): Promise<PersistedState | null> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_STATE, 'readonly');
-        const store = tx.objectStore(STORE_STATE);
+        const transaction = db.transaction(STORE_STATE, 'readonly');
+        const store = transaction.objectStore(STORE_STATE);
 
-        const req = store.get('gameState');
+        const request = store.get('gameState');
 
-        req.onsuccess = () => resolve(req.result ?? null);
-        req.onerror = () => reject(req.error);
+        request.onsuccess = () => resolve(request.result ?? null);
+        request.onerror = () => reject(request.error);
     });
 };
 
@@ -74,12 +74,12 @@ export const saveState = async (state: PersistedState): Promise<void> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_STATE, 'readwrite');
-        const store = tx.objectStore(STORE_STATE);
+        const transaction = db.transaction(STORE_STATE, 'readwrite');
+        const store = transaction.objectStore(STORE_STATE);
 
         store.put(state, 'gameState');
 
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
     });
 };
