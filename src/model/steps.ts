@@ -27,7 +27,7 @@ export interface Step {
     title: string;
     text: string;
     type: STEP_TYPE;
-    links: Link[] | null;
+    links: Link[];
 }
 
 export const STEPS: Step[] = [
@@ -50,7 +50,7 @@ export const STEPS: Step[] = [
         type: STEP_TYPE.END,
         title: 'Оффер',
         text: 'Запросили',
-        links: null,
+        links: [],
     },
     {
         id: STEP_ID.START,

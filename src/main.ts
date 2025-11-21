@@ -19,7 +19,7 @@ const createInitialState = (): State => ({
     history: [STEP_ID.START],
 });
 
-export const stepperApp = async (): Promise<void> => {
+export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
     if (!root) throw new Error('root is undefined');
 
@@ -56,7 +56,7 @@ export const stepperApp = async (): Promise<void> => {
 
     const onRandom = (): void => {
         const step = getStep(state.currentStepId);
-        if (!step.links || step.links.length === 0) return;
+        if (!step.links.length) return;
 
         const index = Math.floor(Math.random() * step.links.length);
         const randomLink = step.links[index];
@@ -100,4 +100,4 @@ export const stepperApp = async (): Promise<void> => {
     render();
 };
 
-stepperApp();
+App();
