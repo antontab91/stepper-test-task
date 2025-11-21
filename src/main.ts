@@ -1,5 +1,5 @@
-import { STEPS, STEP_ID } from './model/steps';
-import type { Step, Link } from './model/steps';
+import { STEPS, STEP_ID } from './data/steps';
+import type { Step, Link } from './data/steps';
 
 import StepUI from './ui/TopUI';
 import InfoUI from './ui/InfoUI';

@@ -1,4 +1,4 @@
-import type { Step } from '../model/steps';
+import type { Step } from '../data/steps';
 
 const DB_NAME = 'stepper-db';
 const STORE = 'steps';

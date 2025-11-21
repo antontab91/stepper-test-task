@@ -1,5 +1,5 @@
-import type { Step, Link } from '../model/steps';
-import { STEP_TYPE } from '../model/steps';
+import type { Step, Link } from '../data/steps';
+import { STEP_TYPE } from '../data/steps';
 
 interface Props {
     step: Step;

@@ -1,4 +1,4 @@
-export const enum STEP_ID {
+export enum STEP_ID {
     START = 'start',
     PREPARED = 'prepared',
     SENT_CV = 'sentCv',
@@ -11,24 +11,24 @@ export const enum STEP_ID {
     OFFER = 'endOffer',
 }
 
-export const enum STEP_TYPE {
+export enum STEP_TYPE {
     BRANCH = 'branch',
     RANDOM = 'random',
     END = 'end',
 }
 
-export interface Link {
+export type Link = {
     label: string;
     to: STEP_ID;
-}
+};
 
-export interface Step {
+export type Step = {
     id: STEP_ID;
     title: string;
     text: string;
     type: STEP_TYPE;
     links: Link[];
-}
+};
 
 export const STEPS: Step[] = [
     {
