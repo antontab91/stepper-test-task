@@ -46,8 +46,8 @@ export const STEPS: Step[] = [
 
     {
         id: STEP_ID_MAP.REJECT,
-        title: 'Відмова після технічної',
-        text: 'Ми обрали іншого кандидата',
+        title: 'Відмова',
+        text: 'Обрали іншого кандидата',
         type: STEP_TYPE_MAP.BRANCH,
         links: [{ label: 'Буду шукати далі', to: STEP_ID_MAP.START }],
     },
