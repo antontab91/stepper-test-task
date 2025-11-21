@@ -32,12 +32,6 @@ export const App = async (): Promise<void> => {
     const steps = await initSteps();
     let state = await initState();
 
-    const getStep = (id: StepId): Step => {
-        const step = steps.find((s) => s.id === id);
-        if (!step) throw new Error(`Unknown step id: ${id}`);
-        return step;
-    };
-
     const updateState = (next: State): void => {
         state = next;
         saveState(state);
@@ -56,7 +50,7 @@ export const App = async (): Promise<void> => {
     };
 
     const onRandom = (): void => {
-        const step = getStep(state.currentStepId);
+        const step = getStep({ id: state.currentStepId, steps });
         if (!step.links.length) return;
 
         const index = Math.floor(Math.random() * step.links.length);
@@ -70,7 +64,7 @@ export const App = async (): Promise<void> => {
     const render = (): void => {
         root.innerHTML = '';
 
-        const step = getStep(state.currentStepId);
+        const step = getStep({ id: state.currentStepId, steps });
 
         const stepEl = StepUI({ step });
         const controlsEl = ControlsUI({ step, onLink, onRandom, onRestart });
@@ -85,22 +79,28 @@ export const App = async (): Promise<void> => {
 App();
 
 async function initSteps(): Promise<Step[]> {
-    try {
-        const loaded = await loadSteps();
-        if (loaded.length) return loaded;
+    let loaded: Step[] = [];
 
-        await saveSteps(INITIAL_STEPS);
-        return INITIAL_STEPS;
+    try {
+        loaded = await loadSteps();
     } catch (err) {
         console.warn(err);
-        return INITIAL_STEPS;
     }
+
+    if (loaded.length > 0) {
+        return loaded;
+    }
+
+    saveSteps(INITIAL_STEPS);
+    return INITIAL_STEPS;
 }
 
 async function initState(): Promise<State> {
     try {
         const saved = await loadState();
-        if (saved) return saved;
+        if (saved) {
+            return saved;
+        }
     } catch (err) {
         console.warn(err);
     }
@@ -109,3 +109,9 @@ async function initState(): Promise<State> {
     saveState(initial);
     return initial;
 }
+
+export const getStep = ({ id, steps }: { id: StepId; steps: Step[] }): Step => {
+    const step = steps.find((s) => s.id === id);
+    if (!step) throw new Error(`Unknown step id: ${id}`);
+    return step;
+};
