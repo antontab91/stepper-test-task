@@ -1,5 +1,5 @@
 import type { Step, Link } from '../model/steps';
-import { STEP_TYPE_MAP } from '../model/steps';
+import { STEP_TYPE } from '../model/steps';
 
 interface Props {
     root: HTMLElement;
@@ -16,7 +16,7 @@ const ControlsUI = ({
     onRandom,
     onRestart,
 }: Props): void => {
-    if (step.type === STEP_TYPE_MAP.BRANCH) {
+    if (step.type === STEP_TYPE.BRANCH) {
         step.links?.forEach((link) => {
             const btn = document.createElement('button');
             btn.textContent = link.label;
@@ -27,7 +27,7 @@ const ControlsUI = ({
         return;
     }
 
-    if (step.type === STEP_TYPE_MAP.RANDOM) {
+    if (step.type === STEP_TYPE.RANDOM) {
         const btn = document.createElement('button');
 
         btn.className = 'btn';
@@ -39,7 +39,7 @@ const ControlsUI = ({
         return;
     }
 
-    if (step.type === STEP_TYPE_MAP.END) {
+    if (step.type === STEP_TYPE.END) {
         const btn = document.createElement('button');
 
         btn.className = 'btn';

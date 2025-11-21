@@ -1,5 +1,5 @@
-import { STEPS, STEP_ID_MAP } from './model/steps';
-import type { Step, StepId, Link } from './model/steps';
+import { STEPS, STEP_ID } from './model/steps';
+import type { Step, Link } from './model/steps';
 
 import StepUI from './ui/StepUI';
 import InfoUI from './ui/InfoUI';
@@ -10,36 +10,41 @@ import { loadSteps, saveSteps } from './store/db';
 import './styles/index.css';
 
 interface State {
-    currentStepId: StepId;
-    history: StepId[];
+    currentStepId: STEP_ID;
+    history: STEP_ID[];
 }
 
 const createInitialState = (): State => ({
-    currentStepId: STEP_ID_MAP.START,
-    history: [STEP_ID_MAP.START],
+    currentStepId: STEP_ID.START,
+    history: [STEP_ID.START],
 });
 
 export const stepperApp = async (): Promise<void> => {
     const root = document.getElementById('app');
-    if (!root) throw new Error('root is undefinesd');
+    if (!root) throw new Error('root is undefined');
 
-    const fromDb: Step[] = await loadSteps();
+    let steps: Step[] = STEPS;
 
-    const steps: Step[] = fromDb.length > 0 ? fromDb : STEPS;
-
-    if (fromDb.length === 0) {
-        await saveSteps(STEPS);
+    try {
+        const fromDb = await loadSteps();
+        if (fromDb.length === 0) {
+            await saveSteps(STEPS);
+        } else {
+            steps = fromDb;
+        }
+    } catch (e) {
+        console.warn('IndexedDB недоступен, используются дефолтные шаги', e);
     }
 
     let state: State = createInitialState();
 
-    const getStep = (id: StepId): Step => {
+    const getStep = (id: STEP_ID): Step => {
         const step = steps.find((s) => s.id === id);
-        if (!step) throw new Error(` ${id} - unknown id:`);
+        if (!step) throw new Error(`Unknown step id: ${id}`);
         return step;
     };
 
-    const goTo = (nextId: StepId): void => {
+    const goTo = (nextId: STEP_ID): void => {
         state = {
             currentStepId: nextId,
             history: [...state.history, nextId],
@@ -52,6 +57,7 @@ export const stepperApp = async (): Promise<void> => {
     const onRandom = (): void => {
         const step = getStep(state.currentStepId);
         if (!step.links || step.links.length === 0) return;
+
         const index = Math.floor(Math.random() * step.links.length);
         const randomLink = step.links[index];
         goTo(randomLink.to);
@@ -62,23 +68,33 @@ export const stepperApp = async (): Promise<void> => {
         render();
     };
 
+    const stepContainer = document.createElement('div');
+    const controlsContainer = document.createElement('div');
+    const infoContainer = document.createElement('div');
+
+    stepContainer.className = 'step-container';
+    controlsContainer.className = 'controls-container';
+    infoContainer.className = 'info-container';
+
+    root.append(stepContainer, controlsContainer, infoContainer);
+
     const render = (): void => {
         const step = getStep(state.currentStepId);
         const totalSteps = state.history.length;
 
-        root.innerHTML = '';
+        stepContainer.innerHTML = '';
+        controlsContainer.innerHTML = '';
+        infoContainer.innerHTML = '';
 
-        StepUI({ root, step });
-
+        StepUI({ root: stepContainer, step });
         ControlsUI({
-            root,
+            root: controlsContainer,
             step,
             onLink,
             onRandom,
             onRestart,
         });
-
-        InfoUI({ root, totalSteps });
+        InfoUI({ root: infoContainer, totalSteps });
     };
 
     render();
