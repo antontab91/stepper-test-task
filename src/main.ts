@@ -1,7 +1,7 @@
 import { STEPS, STEP_ID } from './model/steps';
 import type { Step, Link } from './model/steps';
 
-import StepUI from './ui/StepUI';
+import StepUI from './ui/TopUI';
 import InfoUI from './ui/InfoUI';
 import ControlsUI from './ui/ControlsUI';
 
@@ -18,6 +18,8 @@ const createInitialState = (): State => ({
     currentStepId: STEP_ID.START,
     history: [STEP_ID.START],
 });
+
+const CONTAINERS_NAMES = ['step', 'controls', 'info'] as const;
 
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
@@ -52,15 +54,16 @@ export const App = async (): Promise<void> => {
         render();
     };
 
-    const onLink = (link: Link): void => goTo(link.to);
+    const onLink = (link: Link): void => {
+        goTo(link.to);
+    };
 
     const onRandom = (): void => {
         const step = getStep(state.currentStepId);
         if (!step.links.length) return;
 
         const index = Math.floor(Math.random() * step.links.length);
-        const randomLink = step.links[index];
-        goTo(randomLink.to);
+        goTo(step.links[index].to);
     };
 
     const onRestart = (): void => {
@@ -68,25 +71,19 @@ export const App = async (): Promise<void> => {
         render();
     };
 
-    const stepContainer = document.createElement('div');
-    const controlsContainer = document.createElement('div');
-    const infoContainer = document.createElement('div');
-
-    stepContainer.className = 'step-container';
-    controlsContainer.className = 'controls-container';
-    infoContainer.className = 'info-container';
-
-    root.append(stepContainer, controlsContainer, infoContainer);
-
     const render = (): void => {
+        root.innerHTML = '';
+
+        const containers = createContainers();
+        const [stepContainer, controlsContainer, infoContainer] = containers;
+
+        root.append(...containers);
+
         const step = getStep(state.currentStepId);
         const totalSteps = state.history.length;
 
-        stepContainer.innerHTML = '';
-        controlsContainer.innerHTML = '';
-        infoContainer.innerHTML = '';
-
         StepUI({ root: stepContainer, step });
+
         ControlsUI({
             root: controlsContainer,
             step,
@@ -94,10 +91,19 @@ export const App = async (): Promise<void> => {
             onRandom,
             onRestart,
         });
+
         InfoUI({ root: infoContainer, totalSteps });
     };
 
     render();
 };
+
+function createContainers(): HTMLElement[] {
+    return CONTAINERS_NAMES.map((name) => {
+        const el = document.createElement('div');
+        el.className = `${name}-container`;
+        return el;
+    });
+}
 
 App();

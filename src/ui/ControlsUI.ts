@@ -43,7 +43,7 @@ const ControlsUI = ({
         const btn = document.createElement('button');
 
         btn.className = 'btn';
-        btn.textContent = 'Почати новий квест';
+        btn.textContent = 'Почати заново';
 
         btn.onclick = onRestart;
         root.append(btn);

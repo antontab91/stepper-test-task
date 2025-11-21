@@ -5,7 +5,7 @@ interface Props {
     step: Step;
 }
 
-const StepUI = ({ root, step }: Props): void => {
+const TopUI = ({ root, step }: Props): void => {
     const title = document.createElement('h2');
     title.textContent = step.title;
 
@@ -15,4 +15,4 @@ const StepUI = ({ root, step }: Props): void => {
     root.append(title, text);
 };
 
-export default StepUI;
+export default TopUI;
