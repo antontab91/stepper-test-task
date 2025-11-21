@@ -1,18 +1,21 @@
 import type { Step } from '../model/steps';
 
 interface Props {
-    root: HTMLElement;
     step: Step;
 }
 
-const TopUI = ({ root, step }: Props): void => {
+const TopUI = ({ step }: Props): HTMLElement => {
+    const container = document.createElement('div');
+    container.className = 'step-container';
+
     const title = document.createElement('h2');
     title.textContent = step.title;
 
     const text = document.createElement('p');
     text.textContent = step.text;
 
-    root.append(title, text);
+    container.append(title, text);
+    return container;
 };
 
 export default TopUI;

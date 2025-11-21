@@ -2,7 +2,6 @@ import type { Step, Link } from '../model/steps';
 import { STEP_TYPE } from '../model/steps';
 
 interface Props {
-    root: HTMLElement;
     step: Step;
     onLink: (link: Link) => void;
     onRandom: () => void;
@@ -10,44 +9,67 @@ interface Props {
 }
 
 const ControlsUI = ({
-    root,
     step,
     onLink,
     onRandom,
     onRestart,
-}: Props): void => {
-    if (step.type === STEP_TYPE.BRANCH) {
-        step.links?.forEach((link) => {
-            const btn = document.createElement('button');
-            btn.textContent = link.label;
+}: Props): HTMLElement => {
+    const container = document.createElement('div');
+    container.className = 'controls-container';
 
-            btn.onclick = () => onLink(link);
-            root.append(btn);
-        });
-        return;
+    switch (step.type) {
+        case STEP_TYPE.BRANCH: {
+            step.links.forEach((link) => {
+                container.append(
+                    createButton({
+                        text: link.label,
+                        onClick: () => onLink(link),
+                        className: 'btn',
+                    })
+                );
+            });
+            break;
+        }
+
+        case STEP_TYPE.RANDOM: {
+            container.append(
+                createButton({
+                    text: 'Чекати відповідь компанії',
+                    onClick: onRandom,
+                    className: 'btn',
+                })
+            );
+            break;
+        }
+
+        case STEP_TYPE.END: {
+            container.append(
+                createButton({
+                    text: 'Почати заново',
+                    onClick: onRestart,
+                    className: 'btn',
+                })
+            );
+            break;
+        }
     }
 
-    if (step.type === STEP_TYPE.RANDOM) {
-        const btn = document.createElement('button');
-
-        btn.className = 'btn';
-
-        btn.textContent = 'Чекати відповідь компанії';
-
-        btn.onclick = onRandom;
-        root.append(btn);
-        return;
-    }
-
-    if (step.type === STEP_TYPE.END) {
-        const btn = document.createElement('button');
-
-        btn.className = 'btn';
-        btn.textContent = 'Почати заново';
-
-        btn.onclick = onRestart;
-        root.append(btn);
-    }
+    return container;
 };
+function createButton({
+    text,
+    onClick,
+    className,
+}: {
+    text: string;
+    onClick: () => void;
+    className: string;
+}): HTMLButtonElement {
+    const btn = document.createElement('button');
+    btn.className = className;
+    btn.textContent = text;
+    btn.onclick = onClick;
+    return btn;
+}
 
 export default ControlsUI;

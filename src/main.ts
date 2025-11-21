@@ -19,8 +19,6 @@ const createInitialState = (): State => ({
     history: [STEP_ID.START],
 });
 
-const CONTAINERS_NAMES = ['step', 'controls', 'info'] as const;
-
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
     if (!root) throw new Error('root is undefined');
@@ -34,8 +32,8 @@ export const App = async (): Promise<void> => {
         } else {
             steps = fromDb;
         }
-    } catch (e) {
-        console.warn('IndexedDB недоступен, используются дефолтные шаги', e);
+    } catch (err) {
+        console.warn('IndexedDB недоступен, используются дефолтные шаги', err);
     }
 
     let state: State = createInitialState();
@@ -74,36 +72,16 @@ export const App = async (): Promise<void> => {
     const render = (): void => {
         root.innerHTML = '';
 
-        const containers = createContainers();
-        const [stepContainer, controlsContainer, infoContainer] = containers;
-
-        root.append(...containers);
-
         const step = getStep(state.currentStepId);
-        const totalSteps = state.history.length;
 
-        StepUI({ root: stepContainer, step });
+        const stepEl = StepUI({ step });
+        const controlsEl = ControlsUI({ step, onLink, onRandom, onRestart });
+        const infoEl = InfoUI({ totalSteps: state.history.length });
 
-        ControlsUI({
-            root: controlsContainer,
-            step,
-            onLink,
-            onRandom,
-            onRestart,
-        });
-
-        InfoUI({ root: infoContainer, totalSteps });
+        root.append(stepEl, controlsEl, infoEl);
     };
 
     render();
 };
-
-function createContainers(): HTMLElement[] {
-    return CONTAINERS_NAMES.map((name) => {
-        const el = document.createElement('div');
-        el.className = `${name}-container`;
-        return el;
-    });
-}
 
 App();
