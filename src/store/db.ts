@@ -1,9 +1,8 @@
-import type { Step } from '../data/steps';
-import type { STEP_ID } from '../data/steps';
+import type { Step, StepId } from '../data/steps';
 
 export interface PersistedState {
-    currentStepId: STEP_ID;
-    history: STEP_ID[];
+    currentStepId: StepId;
+    history: StepId[];
 }
 
 const DB_NAME = 'stepper-db';

@@ -8,6 +8,12 @@ interface Props {
     onRestart: () => void;
 }
 
+interface ButtonProps {
+    text: string;
+    onClick: () => void;
+    className: string;
+}
+
 const ControlsUI = ({
     step,
     onLink,
@@ -60,11 +66,7 @@ function createButton({
     text,
     onClick,
     className,
-}: {
-    text: string;
-    onClick: () => void;
-    className: string;
-}): HTMLButtonElement {
+}: ButtonProps): HTMLButtonElement {
     const btn = document.createElement('button');
     btn.className = className;
     btn.textContent = text;
