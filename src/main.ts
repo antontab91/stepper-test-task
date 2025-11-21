@@ -5,31 +5,37 @@ import StepUI from './ui/StepUI';
 import InfoUI from './ui/InfoUI';
 import ControlsUI from './ui/ControlsUI';
 
+import { loadSteps, saveSteps } from './store/db';
+
 import './styles/index.css';
 
-interface QuestState {
+interface State {
     currentStepId: StepId;
     history: StepId[];
 }
 
-export interface ViewState {
-    totalSteps: number;
-}
-
-const createInitialState = (): QuestState => ({
+const createInitialState = (): State => ({
     currentStepId: STEP_ID_MAP.START,
     history: [STEP_ID_MAP.START],
 });
 
-export const stepperApp = (): void => {
+export const stepperApp = async (): Promise<void> => {
     const root = document.getElementById('app');
-    if (!root) return;
+    if (!root) throw new Error('root is undefinesd');
 
-    let state: QuestState = createInitialState();
+    const fromDb: Step[] = await loadSteps();
+
+    const steps: Step[] = fromDb.length > 0 ? fromDb : STEPS;
+
+    if (fromDb.length === 0) {
+        await saveSteps(STEPS);
+    }
+
+    let state: State = createInitialState();
 
     const getStep = (id: StepId): Step => {
-        const step = STEPS.find((s) => s.id === id);
-        if (!step) throw new Error(`Unknown step id: ${id}`);
+        const step = steps.find((s) => s.id === id);
+        if (!step) throw new Error(` ${id} - unknown id:`);
         return step;
     };
 
@@ -58,7 +64,7 @@ export const stepperApp = (): void => {
 
     const render = (): void => {
         const step = getStep(state.currentStepId);
-        const viewState: ViewState = { totalSteps: state.history.length };
+        const totalSteps = state.history.length;
 
         root.innerHTML = '';
 
@@ -72,7 +78,7 @@ export const stepperApp = (): void => {
             onRestart,
         });
 
-        InfoUI({ root, totalSteps: viewState.totalSteps });
+        InfoUI({ root, totalSteps });
     };
 
     render();

@@ -11,7 +11,7 @@ export const STEP_ID_MAP = {
     OFFER: 'endOffer',
 } as const;
 
-const STEP_TYPE_MAP = {
+export const STEP_TYPE_MAP = {
     BRANCH: 'branch',
     RANDOM: 'random',
     END: 'end',
