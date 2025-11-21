@@ -37,9 +37,10 @@ export const App = async (): Promise<void> => {
         if (!step) throw new Error(`Unknown step id: ${id}`);
         return step;
     };
+
     const updateState = (next: State): void => {
         state = next;
-        state;
+        saveState(state);
         render();
     };
 
