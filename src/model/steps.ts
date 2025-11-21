@@ -1,4 +1,4 @@
-const STEP_ID_MAP = {
+export const STEP_ID_MAP = {
     START: 'start',
     PREPARED: 'prepared',
     SENT_CV: 'sentCv',
@@ -7,7 +7,7 @@ const STEP_ID_MAP = {
     TECH_INTERVIEW: 'techInterview',
     BAR_RAISER: 'barRaiser',
     POSITION_CLOSED: 'positionClosed',
-    REJECT: 'silentReject',
+    REJECT: 'reject',
     OFFER: 'endOffer',
 } as const;
 
@@ -19,20 +19,20 @@ const STEP_TYPE_MAP = {
 
 type Values<T> = T[keyof T];
 
-type StepId = Values<typeof STEP_ID_MAP>;
+export type StepId = Values<typeof STEP_ID_MAP>;
 type StepType = Values<typeof STEP_TYPE_MAP>;
 
-interface Link {
-    label?: string;
+export interface Link {
+    label: string;
     to: StepId;
 }
 
-interface Step {
+export interface Step {
     id: StepId;
     title: string;
     text: string;
     type: StepType;
-    links?: Link[];
+    links: Link[] | null;
 }
 
 export const STEPS: Step[] = [
@@ -41,6 +41,7 @@ export const STEPS: Step[] = [
         type: STEP_TYPE_MAP.BRANCH,
         title: 'Вакансію закрили',
         text: 'Позиція закрита',
+        links: [{ label: 'Буду шукати далі', to: STEP_ID_MAP.START }],
     },
 
     {
@@ -56,6 +57,7 @@ export const STEPS: Step[] = [
         type: STEP_TYPE_MAP.END,
         title: 'Оффер',
         text: 'Запросили',
+        links: null,
     },
     {
         id: STEP_ID_MAP.START,
@@ -86,9 +88,15 @@ export const STEPS: Step[] = [
         text: 'Відправив CV. Перевіряю email, LinkedIn , Telegram.',
         type: STEP_TYPE_MAP.RANDOM,
         links: [
-            { to: STEP_ID_MAP.SCREENING_INVITE },
-            { to: STEP_ID_MAP.POSITION_CLOSED },
-            { to: STEP_ID_MAP.REJECT },
+            {
+                label: 'Запрошення на скринінг',
+                to: STEP_ID_MAP.SCREENING_INVITE,
+            },
+            {
+                label: 'Вакансію закрили',
+                to: STEP_ID_MAP.POSITION_CLOSED,
+            },
+            { label: 'Довго чекав, не відповіли ', to: STEP_ID_MAP.REJECT },
         ],
     },
 
