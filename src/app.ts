@@ -1,40 +1,37 @@
-import { STEP_ID, type Step, type StepId } from './data/steps';
+import { type Step, STEP_ID } from './types/step';
+import rawSteps from './data/steps.json';
+
+import { loadSteps, saveSteps, loadState, saveState } from './store/db';
+import {
+    createInitialState,
+    reduce,
+    type State,
+    type Action,
+} from './store/state';
 
 import StepUI from './components/TopUI';
 import InfoUI from './components/InfoUI';
 import ControlsUI from './components/ControlsUI';
 
-import {
-    loadSteps,
-    saveSteps,
-    loadState,
-    saveState,
-    type PersistedState,
-} from './store/db';
-
-import rawSteps from './data/steps.json';
-
 import './styles/index.css';
-
-type State = PersistedState;
 
 const INITIAL_STEPS: Step[] = rawSteps as Step[];
 
-const createInitialState = (): State => ({
-    currentStepId: STEP_ID.START,
-    history: [STEP_ID.START],
-});
-
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
-
     if (!root) throw new Error('root undefined');
 
     const steps = await initSteps();
     let state = await initState();
 
-    const updateState = (next: State): void => {
-        state = next;
+    const getStep = (id: STEP_ID): Step => {
+        const step = steps.find((s) => s.id === id);
+        if (!step) throw new Error(`Unknown id: ${id}`);
+        return step;
+    };
+
+    const dispatch = (action: Action): void => {
+        state = reduce(state, action);
         saveState(state);
         render();
     };
@@ -42,10 +39,10 @@ export const App = async (): Promise<void> => {
     const render = (): void => {
         root.innerHTML = '';
 
-        const step = getStep({ id: state.currentStepId, steps });
+        const step = getStep(state.currentStepId);
 
         const stepEl = StepUI({ step });
-        const controlsEl = ControlsUI({ step, state, updateState });
+        const controlsEl = ControlsUI({ step, dispatch });
         const infoEl = InfoUI({ totalSteps: state.history.length });
 
         root.append(stepEl, controlsEl, infoEl);
@@ -87,9 +84,3 @@ async function initState(): Promise<State> {
     saveState(initial);
     return initial;
 }
-
-export const getStep = ({ id, steps }: { id: StepId; steps: Step[] }): Step => {
-    const step = steps.find((s) => s.id === id);
-    if (!step) throw new Error(`Unknown id: ${id}`);
-    return step;
-};

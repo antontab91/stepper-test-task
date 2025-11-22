@@ -1,4 +1,4 @@
-import type { Step } from '../data/steps';
+import type { Step } from '../types/step';
 
 interface Props {
     step: Step;

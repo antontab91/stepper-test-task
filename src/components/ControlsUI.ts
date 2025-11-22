@@ -1,31 +1,14 @@
-import { STEP_TYPE, STEP_ID, type Step, type StepId } from '../data/steps';
-import type { PersistedState } from '../store/db';
+import { STEP_TYPE, type Step } from '../types/step';
+import { ActionType, type Action } from '../store/state';
 
 interface Props {
     step: Step;
-    state: PersistedState;
-    updateState: (next: PersistedState) => void;
+    dispatch: (action: Action) => void;
 }
 
-const ControlsUI = ({ step, state, updateState }: Props): HTMLElement => {
+const ControlsUI = ({ step, dispatch }: Props): HTMLElement => {
     const container = document.createElement('div');
     container.className = 'controls-container';
-
-    const handleSetStep = (nextId: StepId, resetHistory = false): void => {
-        updateState({
-            currentStepId: nextId,
-            history: resetHistory ? [nextId] : [...state.history, nextId],
-        });
-    };
-
-    const handleRandom = (): void => {
-        if (!step.links.length) return;
-
-        const randomLink =
-            step.links[Math.floor(Math.random() * step.links.length)];
-
-        handleSetStep(randomLink.to);
-    };
 
     switch (step.type) {
         case STEP_TYPE.BRANCH: {
@@ -33,7 +16,11 @@ const ControlsUI = ({ step, state, updateState }: Props): HTMLElement => {
                 container.append(
                     createButton({
                         text: link.label,
-                        onClick: () => handleSetStep(link.to),
+                        onClick: () =>
+                            dispatch({
+                                type: ActionType.GO_TO,
+                                id: link.to,
+                            }),
                     })
                 );
             }
@@ -44,7 +31,11 @@ const ControlsUI = ({ step, state, updateState }: Props): HTMLElement => {
             container.append(
                 createButton({
                     text: 'Чекати відповідь компанії',
-                    onClick: handleRandom,
+                    onClick: () =>
+                        dispatch({
+                            type: ActionType.RANDOM,
+                            step,
+                        }),
                 })
             );
             break;
@@ -54,11 +45,17 @@ const ControlsUI = ({ step, state, updateState }: Props): HTMLElement => {
             container.append(
                 createButton({
                     text: 'Заново',
-                    onClick: () => handleSetStep(STEP_ID.START, true),
+                    onClick: () =>
+                        dispatch({
+                            type: ActionType.RESTART,
+                        }),
                 })
             );
             break;
         }
+
+        default:
+            break;
     }
 
     return container;
