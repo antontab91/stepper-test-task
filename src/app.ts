@@ -1,8 +1,8 @@
 import { STEP_ID, type Step, type StepId } from './data/steps';
 
-import StepUI from './ui/TopUI';
-import InfoUI from './ui/InfoUI';
-import ControlsUI from './ui/ControlsUI';
+import StepUI from './components/TopUI';
+import InfoUI from './components/InfoUI';
+import ControlsUI from './components/ControlsUI';
 
 import {
     loadSteps,
@@ -27,7 +27,8 @@ const createInitialState = (): State => ({
 
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
-    if (!root) throw new Error('root is undefined');
+
+    if (!root) throw new Error('root undefined');
 
     const steps = await initSteps();
     let state = await initState();
@@ -89,6 +90,6 @@ async function initState(): Promise<State> {
 
 export const getStep = ({ id, steps }: { id: StepId; steps: Step[] }): Step => {
     const step = steps.find((s) => s.id === id);
-    if (!step) throw new Error(`Unknown step id: ${id}`);
+    if (!step) throw new Error(`Unknown id: ${id}`);
     return step;
 };
