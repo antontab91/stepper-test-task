@@ -1,4 +1,4 @@
-import { STEP_ID, type Step, type Link, type StepId } from './data/steps';
+import { STEP_ID, type Step, type StepId } from './data/steps';
 
 import StepUI from './ui/TopUI';
 import InfoUI from './ui/InfoUI';
@@ -38,36 +38,13 @@ export const App = async (): Promise<void> => {
         render();
     };
 
-    const goTo = (nextId: StepId): void => {
-        updateState({
-            currentStepId: nextId,
-            history: [...state.history, nextId],
-        });
-    };
-
-    const onLink = (link: Link): void => {
-        goTo(link.to);
-    };
-
-    const onRandom = (): void => {
-        const step = getStep({ id: state.currentStepId, steps });
-        if (!step.links.length) return;
-
-        const index = Math.floor(Math.random() * step.links.length);
-        goTo(step.links[index].to);
-    };
-
-    const onRestart = (): void => {
-        updateState(createInitialState());
-    };
-
     const render = (): void => {
         root.innerHTML = '';
 
         const step = getStep({ id: state.currentStepId, steps });
 
         const stepEl = StepUI({ step });
-        const controlsEl = ControlsUI({ step, onLink, onRandom, onRestart });
+        const controlsEl = ControlsUI({ step, state, updateState });
         const infoEl = InfoUI({ totalSteps: state.history.length });
 
         root.append(stepEl, controlsEl, infoEl);

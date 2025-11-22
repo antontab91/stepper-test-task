@@ -1,39 +1,42 @@
-import type { Step, Link } from '../data/steps';
-import { STEP_TYPE } from '../data/steps';
+import { STEP_TYPE, STEP_ID, type Step, type StepId } from '../data/steps';
+import type { PersistedState } from '../store/db';
 
 interface Props {
     step: Step;
-    onLink: (link: Link) => void;
-    onRandom: () => void;
-    onRestart: () => void;
+    state: PersistedState;
+    updateState: (next: PersistedState) => void;
 }
 
-interface ButtonProps {
-    text: string;
-    onClick: () => void;
-    className: string;
-}
-
-const ControlsUI = ({
-    step,
-    onLink,
-    onRandom,
-    onRestart,
-}: Props): HTMLElement => {
+const ControlsUI = ({ step, state, updateState }: Props): HTMLElement => {
     const container = document.createElement('div');
     container.className = 'controls-container';
 
+    const handleSetStep = (nextId: StepId, resetHistory = false): void => {
+        updateState({
+            currentStepId: nextId,
+            history: resetHistory ? [nextId] : [...state.history, nextId],
+        });
+    };
+
+    const handleRandom = (): void => {
+        if (!step.links.length) return;
+
+        const randomLink =
+            step.links[Math.floor(Math.random() * step.links.length)];
+
+        handleSetStep(randomLink.to);
+    };
+
     switch (step.type) {
         case STEP_TYPE.BRANCH: {
-            step.links.forEach((link) => {
+            for (const link of step.links) {
                 container.append(
                     createButton({
                         text: link.label,
-                        onClick: () => onLink(link),
-                        className: 'btn',
+                        onClick: () => handleSetStep(link.to),
                     })
                 );
-            });
+            }
             break;
         }
 
@@ -41,8 +44,7 @@ const ControlsUI = ({
             container.append(
                 createButton({
                     text: 'Чекати відповідь компанії',
-                    onClick: onRandom,
-                    className: 'btn',
+                    onClick: handleRandom,
                 })
             );
             break;
@@ -51,9 +53,8 @@ const ControlsUI = ({
         case STEP_TYPE.END: {
             container.append(
                 createButton({
-                    text: 'Почати заново',
-                    onClick: onRestart,
-                    className: 'btn',
+                    text: 'Заново',
+                    onClick: () => handleSetStep(STEP_ID.START, true),
                 })
             );
             break;
@@ -62,13 +63,16 @@ const ControlsUI = ({
 
     return container;
 };
+
 function createButton({
     text,
     onClick,
-    className,
-}: ButtonProps): HTMLButtonElement {
+}: {
+    text: string;
+    onClick: () => void;
+}): HTMLButtonElement {
     const btn = document.createElement('button');
-    btn.className = className;
+    btn.className = 'btn';
     btn.textContent = text;
     btn.onclick = onClick;
     return btn;
