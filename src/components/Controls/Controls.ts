@@ -1,5 +1,5 @@
-import { STEP_TYPE, type Step } from '../schema/types';
-import { ActionType, type Action } from '../store/state';
+import { STEP_TYPE, type Step } from '../../schema/types';
+import { ActionType, type Action } from '../../store/state';
 
 interface Props {
     step: Step;

@@ -4,14 +4,14 @@ import allSteps from './schema/steps.json';
 import { loadSteps, saveSteps, loadState, saveState } from './store/db';
 import { reduce, type State, type Action } from './store/state';
 
-import TopContent from './components/TopContent';
-import Info from './components/Info';
-import Controls from './components/Controls';
+import { MainContent, Info, Controls } from './components';
+
+import { USER_NAME_KEY } from './app-constants';
 
 import './styles/index.css';
 
 const INITIAL_STEPS: Step[] = allSteps as Step[];
-const USER_NAME_KEY = 'user-name';
+
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
     if (!root) throw new Error('root undefined');
@@ -39,7 +39,7 @@ export const App = async (): Promise<void> => {
 
         const step = getStep(state.currentStepId);
 
-        const stepEl = TopContent({ step });
+        const stepEl = MainContent({ step });
         const controlsEl = Controls({
             step,
             dispatch,
@@ -64,7 +64,7 @@ function getUserName(): string {
     let name = '';
 
     while (!name) {
-        const input = window.prompt('Введіть імʼя:') ?? '';
+        const input = window.prompt('Введіть імʼя:') || '';
         name = input.trim();
     }
 
@@ -94,7 +94,7 @@ async function initSteps(): Promise<Step[]> {
         return loaded;
     }
 
-    void saveSteps(INITIAL_STEPS);
+    saveSteps(INITIAL_STEPS);
     return INITIAL_STEPS;
 }
 

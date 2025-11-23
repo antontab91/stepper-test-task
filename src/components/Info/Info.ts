@@ -1,5 +1,5 @@
-import type { State } from '../store/state';
-import type { Step, STEP_ID } from '../schema/types';
+import type { State } from '../../store/state';
+import type { Step, STEP_ID } from '../../schema/types';
 
 interface Props {
     state: State;
