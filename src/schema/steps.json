@@ -73,6 +73,7 @@
         "text": "Відправив CV. Перевіряю email, LinkedIn, Telegram.",
         "links": [
             { "label": "Скринінг", "to": "screeningInvite" },
+            { "label": "Рекрутер написав напряму", "to": "screeningMessenger" },
             { "label": "Вакансію закрили", "to": "positionClosed" },
             { "label": "Не відповіли", "to": "reject" }
         ]
@@ -86,6 +87,17 @@
         "links": [
             { "label": "Скринінг з HR", "to": "screeningCall" },
             { "label": "Попити чайку", "to": "teaReject" }
+        ]
+    },
+
+    {
+        "id": "screeningMessenger",
+        "type": "branch",
+        "title": "Cкринінг без дзвінка",
+        "text": "Поспілкувались в месенджерах",
+        "links": [
+            { "label": "Все супер", "to": "techInterview" },
+            { "label": "Не метч", "to": "reject" }
         ]
     },
 
@@ -107,6 +119,27 @@
         "text": "JS, TS, React, інше по вимогам",
         "links": [
             { "label": "Вирішив задачі", "to": "barRaiser" },
+            { "label": "Не впорався", "to": "tehReject" },
+            { "label": "Тестове", "to": "testTask" }
+        ]
+    },
+    {
+        "id": "testTask",
+        "type": "branch",
+        "title": "Тевстове",
+        "text": "Тех було 50/50, запропонували тестове",
+        "links": [
+            { "label": "Виконати", "to": "reviewTask" },
+            { "label": "Попити чайку", "to": "teaReject" }
+        ]
+    },
+    {
+        "id": "reviewTask",
+        "type": "random",
+        "title": "Тестове",
+        "text": "Ревьювають тестове",
+        "links": [
+            { "label": "Виконати", "to": "barRaiser" },
             { "label": "Не впорався", "to": "tehReject" }
         ]
     },
@@ -114,8 +147,8 @@
     {
         "id": "barRaiser",
         "type": "random",
-        "title": "Баррейзінг",
-        "text": "Говорю з техлідом",
+        "title": "Запросили Баррейзінг",
+        "text": "Говорю з техлідом, фінальний етап",
         "links": [
             { "label": "Сильні відповіді", "to": "endOffer" },
             { "label": "Вибрали іншого", "to": "barReject" }
