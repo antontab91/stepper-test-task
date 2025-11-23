@@ -10,14 +10,36 @@
         "id": "reject",
         "type": "end",
         "title": "Відмова",
-        "text": "Обрали іншого кандидата",
+        "text": "Обрали іншого кандидата, який більше підходить під вакансію",
+        "links": []
+    },
+    {
+        "id": "tehReject",
+        "type": "end",
+        "title": "Відмова",
+        "text": "Не впоровся з задачами на тех",
+        "links": []
+    },
+    {
+        "id": "barReject",
+        "type": "end",
+        "title": "Відмова",
+        "text": "Не смечився по цінностям на баррейзінгу",
+        "links": []
+    },
+
+    {
+        "id": "teaReject",
+        "type": "end",
+        "title": "Допився чайку",
+        "text": "Поки пив чайок стало пізно і вакансія і процес -все",
         "links": []
     },
     {
         "id": "endOffer",
         "type": "end",
         "title": "Оффер",
-        "text": "Запросили",
+        "text": "Сильні відповіді. Запросили",
         "links": []
     },
 
@@ -29,7 +51,7 @@
         "links": [
             { "label": "Відгукнутися", "to": "sentCv" },
             { "label": "Підготовка", "to": "prepared" },
-            { "label": "Попити чайку", "to": "reject" }
+            { "label": "Попити чайку", "to": "teaReject" }
         ]
     },
 
@@ -37,10 +59,10 @@
         "id": "prepared",
         "type": "branch",
         "title": "Підготовка",
-        "text": "Вивчаю вимоги, готуюсь, оновлюю CV",
+        "text": "Детально вивчаю вимоги вакнсії, готуюсь, оновлюю CV ",
         "links": [
             { "label": "Відгукнутися", "to": "sentCv" },
-            { "label": "Попити чайку", "to": "reject" }
+            { "label": "Попити чайку", "to": "teaReject" }
         ]
     },
 
@@ -63,7 +85,7 @@
         "text": "Рекрутер написав, що СV сподобалось",
         "links": [
             { "label": "Скринінг з HR", "to": "screeningCall" },
-            { "label": "Попити чайку", "to": "reject" }
+            { "label": "Попити чайку", "to": "teaReject" }
         ]
     },
 
@@ -80,24 +102,23 @@
 
     {
         "id": "techInterview",
-        "type": "branch",
+        "type": "random",
         "title": "Технічна співбесіда",
         "text": "JS, TS, React, інше по вимогам",
         "links": [
             { "label": "Вирішив задачі", "to": "barRaiser" },
-            { "label": "Не впорався", "to": "reject" },
-            { "label": "Попити чайку", "to": "reject" }
+            { "label": "Не впорався", "to": "tehReject" }
         ]
     },
 
     {
         "id": "barRaiser",
-        "type": "branch",
+        "type": "random",
         "title": "Баррейзінг",
         "text": "Говорю з техлідом",
         "links": [
             { "label": "Сильні відповіді", "to": "endOffer" },
-            { "label": "Вибрали іншого", "to": "reject" }
+            { "label": "Вибрали іншого", "to": "barReject" }
         ]
     }
 ]

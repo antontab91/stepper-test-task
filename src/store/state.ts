@@ -5,6 +5,7 @@ const EXPERIENCE_STEPS: STEP_ID[] = [
     STEP_ID.PREPARED,
     STEP_ID.TECH_INTERVIEW,
     STEP_ID.SCREENING_CALL,
+    STEP_ID.BAR_RAISER,
 ];
 
 export interface State {

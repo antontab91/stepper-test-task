@@ -8,6 +8,9 @@ export enum STEP_ID {
     BAR_RAISER = 'barRaiser',
     POSITION_CLOSED = 'positionClosed',
     REJECT = 'reject',
+    TEHREJECT = 'tehReject',
+    BARREJECT = 'barReject',
+    TEAREJECT = 'teaReject',
     OFFER = 'endOffer',
 }
 

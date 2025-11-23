@@ -1,5 +1,5 @@
 import type { State } from '../../store/state';
-import type { Step, STEP_ID } from '../../schema/types';
+import { type Step, type STEP_ID, STEP_TYPE } from '../../schema/types';
 
 import styles from './info.module.css';
 
@@ -22,7 +22,16 @@ const Info = ({ state, getStep }: Props): HTMLElement => {
     const { history, attempts, experience } = state;
 
     const totalSteps = history.length - 1;
-    const trail = history.map((id) => getStep(id).title).join(' --> ');
+
+    const trail = history
+        .map((id, i, arr) => {
+            const title = getStep(id).title;
+            if (i > 0 && getStep(arr[i - 1]).type === STEP_TYPE.RANDOM) {
+                return `[Рандом] ${title}`;
+            }
+            return title;
+        })
+        .join(' --> ');
 
     const rows = [
         { label: INFO_LABEL.STEPS, value: totalSteps },
