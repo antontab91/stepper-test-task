@@ -1,6 +1,8 @@
 import { STEP_TYPE, type Step } from '../../schema/types';
 import { ActionType, type Action } from '../../store/state';
 
+import styles from './сontrols.module.css';
+
 interface Props {
     step: Step;
     dispatch: (action: Action) => void;
@@ -9,7 +11,7 @@ interface Props {
 
 const Controls = ({ step, dispatch, isCanBack }: Props): HTMLElement => {
     const container = document.createElement('div');
-    container.className = 'controls-container';
+    container.className = styles.container;
 
     switch (step.type) {
         case STEP_TYPE.BRANCH: {
