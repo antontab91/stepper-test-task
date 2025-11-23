@@ -31,7 +31,7 @@ const Controls = ({ step, dispatch, isCanBack }: Props): HTMLElement => {
         case STEP_TYPE.RANDOM: {
             container.append(
                 createButton({
-                    text: 'Чекати відповідь компанії',
+                    text: 'Чекати відповідь',
                     onClick: () =>
                         dispatch({
                             type: ActionType.RANDOM,

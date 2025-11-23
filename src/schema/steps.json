@@ -50,9 +50,9 @@
         "title": "Відправив CV",
         "text": "Відправив CV. Перевіряю email, LinkedIn, Telegram.",
         "links": [
-            { "label": "Запрошення на скринінг", "to": "screeningInvite" },
+            { "label": "Скринінг", "to": "screeningInvite" },
             { "label": "Вакансію закрили", "to": "positionClosed" },
-            { "label": "Довго чекав, не відповіли", "to": "reject" }
+            { "label": "Не відповіли", "to": "reject" }
         ]
     },
 
@@ -62,7 +62,7 @@
         "title": "Запрошення на скринінг",
         "text": "Рекрутер написав, що СV сподобалось",
         "links": [
-            { "label": "Скринінг з ейчаром", "to": "screeningCall" },
+            { "label": "Скринінг з HR", "to": "screeningCall" },
             { "label": "Попити чайку", "to": "reject" }
         ]
     },
@@ -73,8 +73,8 @@
         "title": "Скринінг з ейчаром",
         "text": "Обговорюємо досвід, стек, зарплату",
         "links": [
-            { "label": "Все супер, рухаюсь далі", "to": "techInterview" },
-            { "label": "Не метч, щось не підійшло", "to": "reject" }
+            { "label": "Все супер", "to": "techInterview" },
+            { "label": "Не метч", "to": "reject" }
         ]
     },
 
@@ -85,7 +85,7 @@
         "text": "JS, TS, React, інше по вимогам",
         "links": [
             { "label": "Вирішив задачі", "to": "barRaiser" },
-            { "label": "Не впорався із задачами", "to": "reject" },
+            { "label": "Не впорався", "to": "reject" },
             { "label": "Попити чайку", "to": "reject" }
         ]
     },
@@ -97,7 +97,7 @@
         "text": "Говорю з техлідом",
         "links": [
             { "label": "Сильні відповіді", "to": "endOffer" },
-            { "label": "Вибрали іншого кандидата", "to": "reject" }
+            { "label": "Вибрали іншого", "to": "reject" }
         ]
     }
 ]

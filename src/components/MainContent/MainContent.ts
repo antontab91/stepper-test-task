@@ -15,14 +15,18 @@ const MainContent = ({ step }: Props): HTMLElement => {
 
     container.className = styles.container;
     title.className = styles.title;
+    description.className = styles.description;
+    btn.className = styles.button;
 
     title.textContent = step.title;
     description.textContent = step.text;
-    btn.textContent = 'Змінити імʼя';
+
+    btn.textContent = 'Змінити юзера';
 
     btn.onclick = () => {
         const name = prompt('Введіть нове імʼя:');
         if (!name) return;
+
         localStorage.setItem(USER_NAME_KEY, name.trim());
         location.reload();
     };

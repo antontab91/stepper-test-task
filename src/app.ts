@@ -39,7 +39,7 @@ export const App = async (): Promise<void> => {
 
         const step = getStep(state.currentStepId);
 
-        const stepEl = MainContent({ step });
+        const mainContentEl = MainContent({ step });
         const controlsEl = Controls({
             step,
             dispatch,
@@ -47,7 +47,7 @@ export const App = async (): Promise<void> => {
         });
         const infoEl = Info({ state, getStep });
 
-        root.append(stepEl, controlsEl, infoEl);
+        root.append(mainContentEl, controlsEl, infoEl);
     };
 
     render();
