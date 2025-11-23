@@ -1,17 +1,17 @@
 [
     {
         "id": "positionClosed",
-        "type": "branch",
+        "type": "end",
         "title": "Вакансію закрили",
         "text": "Позиція закрита",
-        "links": [{ "label": "Буду шукати далі", "to": "start" }]
+        "links": []
     },
     {
         "id": "reject",
-        "type": "branch",
+        "type": "end",
         "title": "Відмова",
         "text": "Обрали іншого кандидата",
-        "links": [{ "label": "Буду шукати далі", "to": "start" }]
+        "links": []
     },
     {
         "id": "endOffer",

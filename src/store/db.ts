@@ -1,9 +1,10 @@
-import type { Step } from '../types/step';
+import type { Step } from '../schema/types';
 import type { State } from './state';
 
 const DB_NAME = 'stepper-db';
 const STORE_STEPS = 'steps';
 const STORE_STATE = 'state';
+export const USER_NAME_KEY = 'user-name';
 
 const openDB = (): Promise<IDBDatabase> =>
     new Promise((resolve, reject) => {
@@ -52,28 +53,31 @@ export const saveSteps = async (steps: Step[]): Promise<void> => {
     });
 };
 
-export const loadState = async (): Promise<State | null> => {
+export const loadState = async (userName: string): Promise<State | null> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(STORE_STATE, 'readonly');
         const store = transaction.objectStore(STORE_STATE);
 
-        const request = store.get('gameState');
+        const request = store.get(userName);
 
         request.onsuccess = () => resolve(request.result ?? null);
         request.onerror = () => reject(request.error);
     });
 };
 
-export const saveState = async (state: State): Promise<void> => {
+export const saveState = async (
+    userName: string,
+    state: State
+): Promise<void> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(STORE_STATE, 'readwrite');
         const store = transaction.objectStore(STORE_STATE);
 
-        store.put(state, 'gameState');
+        store.put(state, userName);
 
         transaction.oncomplete = () => resolve();
         transaction.onerror = () => reject(transaction.error);

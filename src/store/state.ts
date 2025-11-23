@@ -1,4 +1,11 @@
-import { type Step, STEP_ID } from '../types/step';
+import { type Step, STEP_ID } from '../schema/types';
+
+const EXPERIENCE_STEPS: STEP_ID[] = [
+    STEP_ID.REJECT,
+    STEP_ID.PREPARED,
+    STEP_ID.TECH_INTERVIEW,
+    STEP_ID.SCREENING_CALL,
+];
 
 export interface State {
     currentStepId: STEP_ID;
@@ -29,7 +36,8 @@ export const reduce = (state: State, action: Action): State => {
                 ...state,
                 currentStepId: id,
                 history: [...state.history, id],
-                experience: state.experience + (isAddExpirience(id) ? 1 : 0),
+                experience:
+                    state.experience + (EXPERIENCE_STEPS.includes(id) ? 1 : 0),
             };
         }
 
@@ -46,7 +54,8 @@ export const reduce = (state: State, action: Action): State => {
                 ...state,
                 currentStepId: id,
                 history: [...state.history, id],
-                experience: state.experience + (isAddExpirience(id) ? 1 : 0),
+                experience:
+                    state.experience + (EXPERIENCE_STEPS.includes(id) ? 1 : 0),
             };
         }
 
@@ -76,7 +85,3 @@ export const reduce = (state: State, action: Action): State => {
             return state;
     }
 };
-
-function isAddExpirience(nextId: STEP_ID): boolean {
-    return nextId === STEP_ID.REJECT || nextId === STEP_ID.OFFER;
-}

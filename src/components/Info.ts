@@ -1,12 +1,12 @@
 import type { State } from '../store/state';
-import type { Step, STEP_ID } from '../types/step';
+import type { Step, STEP_ID } from '../schema/types';
 
 interface Props {
     state: State;
     getStep: (id: STEP_ID) => Step;
 }
 
-const InfoUI = ({ state, getStep }: Props): HTMLElement => {
+const Info = ({ state, getStep }: Props): HTMLElement => {
     const container = document.createElement('div');
     container.className = 'info-container';
 
@@ -30,4 +30,4 @@ const InfoUI = ({ state, getStep }: Props): HTMLElement => {
     return container;
 };
 
-export default InfoUI;
+export default Info;

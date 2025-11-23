@@ -1,4 +1,4 @@
-import { STEP_TYPE, type Step } from '../types/step';
+import { STEP_TYPE, type Step } from '../schema/types';
 import { ActionType, type Action } from '../store/state';
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
     isCanBack: boolean;
 }
 
-const ControlsUI = ({ step, dispatch, isCanBack }: Props): HTMLElement => {
+const Controls = ({ step, dispatch, isCanBack }: Props): HTMLElement => {
     const container = document.createElement('div');
     container.className = 'controls-container';
 
@@ -88,4 +88,4 @@ function createButton({
     return btn;
 }
 
-export default ControlsUI;
+export default Controls;

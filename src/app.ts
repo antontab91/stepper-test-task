@@ -1,23 +1,24 @@
-import { type Step, STEP_ID } from './types/step';
-import allSteps from './data/steps.json';
+import { type Step, STEP_ID } from './schema/types';
+import allSteps from './schema/steps.json';
 
 import { loadSteps, saveSteps, loadState, saveState } from './store/db';
 import { reduce, type State, type Action } from './store/state';
 
-import StepUI from './components/TopUI';
-import InfoUI from './components/InfoUI';
-import ControlsUI from './components/ControlsUI';
+import TopContent from './components/TopContent';
+import Info from './components/Info';
+import Controls from './components/Controls';
 
 import './styles/index.css';
 
 const INITIAL_STEPS: Step[] = allSteps as Step[];
-
+const USER_NAME_KEY = 'user-name';
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
     if (!root) throw new Error('root undefined');
 
+    const userName = getUserName();
     const steps = await initSteps();
-    let state = await initState();
+    let state = await initState(userName);
 
     const getStep = (id: STEP_ID): Step => {
         const step = steps.find((s) => s.id === id);
@@ -27,22 +28,24 @@ export const App = async (): Promise<void> => {
 
     const dispatch = (action: Action): void => {
         state = reduce(state, action);
-        saveState(state);
+        saveState(userName, state);
         render();
     };
+
+    console.log(state);
 
     const render = (): void => {
         root.innerHTML = '';
 
         const step = getStep(state.currentStepId);
 
-        const stepEl = StepUI({ step });
-        const controlsEl = ControlsUI({
+        const stepEl = TopContent({ step });
+        const controlsEl = Controls({
             step,
             dispatch,
-            isCanBack: !!state.history.length,
+            isCanBack: state.history.length > 1,
         });
-        const infoEl = InfoUI({ state, getStep });
+        const infoEl = Info({ state, getStep });
 
         root.append(stepEl, controlsEl, infoEl);
     };
@@ -51,6 +54,23 @@ export const App = async (): Promise<void> => {
 };
 
 App();
+
+function getUserName(): string {
+    const stored = localStorage.getItem(USER_NAME_KEY);
+    if (stored && stored.trim() !== '') {
+        return stored;
+    }
+
+    let name = '';
+
+    while (!name) {
+        const input = window.prompt('Введіть імʼя:') ?? '';
+        name = input.trim();
+    }
+
+    localStorage.setItem(USER_NAME_KEY, name);
+    return name;
+}
 
 function createInitialState(): State {
     return {
@@ -74,13 +94,13 @@ async function initSteps(): Promise<Step[]> {
         return loaded;
     }
 
-    saveSteps(INITIAL_STEPS);
+    void saveSteps(INITIAL_STEPS);
     return INITIAL_STEPS;
 }
 
-async function initState(): Promise<State> {
+async function initState(userName: string): Promise<State> {
     try {
-        const saved = await loadState();
+        const saved = await loadState(userName);
         if (saved) {
             return saved;
         }
@@ -89,6 +109,6 @@ async function initState(): Promise<State> {
     }
 
     const initialState = createInitialState();
-    saveState(initialState);
+    saveState(userName, initialState);
     return initialState;
 }
