@@ -1,9 +1,5 @@
-import { type Step, STEP_ID } from '../types/step';
-
-export interface PersistedState {
-    currentStepId: STEP_ID;
-    history: STEP_ID[];
-}
+import type { Step } from '../types/step';
+import type { State } from './state';
 
 const DB_NAME = 'stepper-db';
 const STORE_STEPS = 'steps';
@@ -56,7 +52,7 @@ export const saveSteps = async (steps: Step[]): Promise<void> => {
     });
 };
 
-export const loadState = async (): Promise<PersistedState | null> => {
+export const loadState = async (): Promise<State | null> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {
@@ -70,7 +66,7 @@ export const loadState = async (): Promise<PersistedState | null> => {
     });
 };
 
-export const saveState = async (state: PersistedState): Promise<void> => {
+export const saveState = async (state: State): Promise<void> => {
     const db = await openDB();
 
     return new Promise((resolve, reject) => {

@@ -1,16 +1,32 @@
+import type { State } from '../store/state';
+import type { Step, STEP_ID } from '../types/step';
+
 interface Props {
-    totalSteps: number;
+    state: State;
+    getStep: (id: STEP_ID) => Step;
 }
 
-const InfoUI = ({ totalSteps }: Props): HTMLElement => {
+const InfoUI = ({ state, getStep }: Props): HTMLElement => {
     const container = document.createElement('div');
     container.className = 'info-container';
 
-    const row = document.createElement('div');
-    row.className = 'info-row';
-    row.textContent = `Пройдено кроків: ${totalSteps - 1}`;
+    const { history, attempts, experience } = state;
 
-    container.append(row);
+    const totalSteps = history.length - 1;
+
+    const trail = history.map((id) => getStep(id).title).join(' → ');
+
+    const el = document.createElement('div');
+
+    el.innerHTML = `
+        <p>Пройдено кроків: <b>${totalSteps}</b></p>
+        <p>Спроб: <b>${attempts}</b></p>
+        <p>Досвід: <b>${experience}</b></p>
+        <p>Історія: ${trail}</p>
+        
+    `;
+
+    container.append(el);
     return container;
 };
 

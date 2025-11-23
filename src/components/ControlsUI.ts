@@ -4,9 +4,10 @@ import { ActionType, type Action } from '../store/state';
 interface Props {
     step: Step;
     dispatch: (action: Action) => void;
+    isCanBack: boolean;
 }
 
-const ControlsUI = ({ step, dispatch }: Props): HTMLElement => {
+const ControlsUI = ({ step, dispatch, isCanBack }: Props): HTMLElement => {
     const container = document.createElement('div');
     container.className = 'controls-container';
 
@@ -56,6 +57,18 @@ const ControlsUI = ({ step, dispatch }: Props): HTMLElement => {
 
         default:
             break;
+    }
+
+    if (isCanBack) {
+        container.append(
+            createButton({
+                text: 'Назад',
+                onClick: () =>
+                    dispatch({
+                        type: ActionType.BACK,
+                    }),
+            })
+        );
     }
 
     return container;

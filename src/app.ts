@@ -1,13 +1,8 @@
 import { type Step, STEP_ID } from './types/step';
-import rawSteps from './data/steps.json';
+import allSteps from './data/steps.json';
 
 import { loadSteps, saveSteps, loadState, saveState } from './store/db';
-import {
-    createInitialState,
-    reduce,
-    type State,
-    type Action,
-} from './store/state';
+import { reduce, type State, type Action } from './store/state';
 
 import StepUI from './components/TopUI';
 import InfoUI from './components/InfoUI';
@@ -15,7 +10,7 @@ import ControlsUI from './components/ControlsUI';
 
 import './styles/index.css';
 
-const INITIAL_STEPS: Step[] = rawSteps as Step[];
+const INITIAL_STEPS: Step[] = allSteps as Step[];
 
 export const App = async (): Promise<void> => {
     const root = document.getElementById('app');
@@ -42,8 +37,12 @@ export const App = async (): Promise<void> => {
         const step = getStep(state.currentStepId);
 
         const stepEl = StepUI({ step });
-        const controlsEl = ControlsUI({ step, dispatch });
-        const infoEl = InfoUI({ totalSteps: state.history.length });
+        const controlsEl = ControlsUI({
+            step,
+            dispatch,
+            isCanBack: !!state.history.length,
+        });
+        const infoEl = InfoUI({ state, getStep });
 
         root.append(stepEl, controlsEl, infoEl);
     };
@@ -52,6 +51,15 @@ export const App = async (): Promise<void> => {
 };
 
 App();
+
+function createInitialState(): State {
+    return {
+        currentStepId: STEP_ID.START,
+        history: [STEP_ID.START],
+        attempts: 0,
+        experience: 0,
+    };
+}
 
 async function initSteps(): Promise<Step[]> {
     let loaded: Step[] = [];
@@ -80,7 +88,7 @@ async function initState(): Promise<State> {
         console.warn(err);
     }
 
-    const initial = createInitialState();
-    saveState(initial);
-    return initial;
+    const initialState = createInitialState();
+    saveState(initialState);
+    return initialState;
 }
