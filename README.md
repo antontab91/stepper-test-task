@@ -48,7 +48,7 @@ npm run build
 You can access the deployed version here:
 
 ```bash
-**https://antontab91.github.io/stepper-test-task/**
+https://antontab91.github.io/stepper-test-task/
 ```
 
 ### How to use
