@@ -42,3 +42,17 @@ npm install
 npm run dev
 npm run build
 ```
+
+## Live Demo
+
+You can access the deployed version here:
+
+```bash
+**https://antontab91.github.io/stepper-test-task/**
+```
+
+### How to use
+
+On the first launch, the application displays a session-initialization modal dialog.  
+Enter any username (for example, `123`).  
+After confirmation, an isolated
