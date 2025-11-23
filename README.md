@@ -1,39 +1,39 @@
 # Stepper Quest
 
-Browser-based branching quest engine with persistent per-user progress.  
+Browserbased branching quest engine with persistent peruser progress.  
 Built with TypeScript and IndexedDB.
 
 ## Features
 
-**Branching flow**
+**Branching flow**:
 Multiple selectable transitions (`BRANCH`)
 
-**Randomized transitions**
+**Randomized transitions**:
 Random choice from available links (`RANDOM`)
 
-**Final states**
+**Final states** :
 Multiple endings (`END`), full restart handling
 
-**Back navigation**
+**Back navigation** :
 Rollback to previous step via history (`BACK`)
 
-**Persistent storage**
-IndexedDB stores: -`steps` — schema -`state` — user progress
+**Persistent storage** :
+IndexedDB stores: `steps` schema state` user progress
 
-**User sessions**
+**User sessions**:
 Username prompt on first launch
 Isolated state per user
 
-**Progress tracking**
+**Progress tracking**:
 Steps passed
 Attempts count
 Experience accumulation
 Full history trail
 
-**UI components**
-`MainContent` — title, description, user switch
-`Controls` — transitions and navigation
-`Info` — statistics and history
+**UI components** :
+`MainContent` title, description, user switch
+`Controls` transitions and navigation
+`Info` statistics and history
 
 ## Scripts
 
