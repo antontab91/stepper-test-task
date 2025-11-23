@@ -1,7 +1,7 @@
 # Stepper Quest
 
 Browserbased branching quest engine with persistent peruser progress.  
-Built with TypeScript and IndexedDB.
+Built with vanilla TypeScript and IndexedDB.(no frameworks, no UI libraries) and bundled via Vite.
 
 ## Features
 
