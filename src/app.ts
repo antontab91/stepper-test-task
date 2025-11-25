@@ -32,8 +32,6 @@ export const App = async (): Promise<void> => {
         render();
     };
 
-    console.log(state);
-
     const render = (): void => {
         root.innerHTML = '';
 
